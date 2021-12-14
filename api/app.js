@@ -70,12 +70,7 @@ app.get('/', (req, res) => {
 
 // 2) ***** API ROUTE MIDDLEWARES ****
 app.use('/api/v1/users', usersRouter);
-app.use('/api/v1/', (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'Welcome to the API',
-  });
-});
+
 // Handling All Unhandled API Routes
 app.all('*', (req, res, next) => {
   next(
