@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     photo: { type: String, default: 'default.jpg' },
     password: {
       type: String,
-      required: [true, '{assword Required'],
+      required: [true, '{Password Required'],
       minlength: 4,
       select: false,
     },
@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema(
     passwordCreatedAt: {
       type: Date,
       default: Date.now(),
+      select: false,
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
