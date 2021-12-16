@@ -24,7 +24,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // 2a) Check if atleast one of the fields is provied
   if (!req.body.fullName && !req.body.email && !req.body.phoneNumber)
     return next(new AppError('Plese Provide the data to be updated', 400));
-  const filteredBody = filterObj(req.body, 'fullName', 'email', 'phoneNumber');
+  const filteredBody = filterObj(
+    req.body,
+    'fullName',
+    'email',
+    'phoneNumber',
+    'nationality'
+  );
 
   //2b) Filtered out unwanted fields names that are not allowed to be updated
   if (req.file) filteredBody.photo = req.file.filename;
