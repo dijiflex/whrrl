@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { makeStyles } from '@mui/styles';
 import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useUpdateMeMutation, useGetMeQuery } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
@@ -120,7 +121,7 @@ const UserProfileForm = () => {
               </Grid>
             </Grid>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, position: 'relative' }}>
               <Button
                 type="submit"
                 size="large"
@@ -131,6 +132,18 @@ const UserProfileForm = () => {
               >
                 Submit
               </Button>
+              {isSubmitting && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-12px',
+                  marginLeft: '-12px',
+                }}
+              />
+              )}
             </Box>
 
           </Form>
