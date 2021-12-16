@@ -50,8 +50,17 @@ const UserProfileForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
+          const newValues = {
+            fullName: values.fullName,
+            nationality: values.nationality,
+            phoneNumber: values.phoneNumber
+          };
+
+          if (values.email !== userData.data.email) {
+            newValues.email = values.email;
+          }
           try {
-            await updateMe(values).unwrap();
+            await updateMe(newValues).unwrap();
             enqueueSnackbar('Profile Updated Successfully', { variant: 'success' });
             refetch();
           } catch (error) {
