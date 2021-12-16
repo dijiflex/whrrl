@@ -4,8 +4,7 @@ const initialState = {
   currentUser: null,
   loggedIn: false,
   loginType: '',
-  status: '',
-  error: ''
+  token: '',
 };
 
 export const userSlice = createSlice({
@@ -23,12 +22,15 @@ export const userSlice = createSlice({
     },
     setloginType: (state, action) => {
       state.loginType = action.payload;
+    },
+    setToken: (state, action) => {
+      state.token = action.payload;
     }
   }
 });
 export const getCurrentUser = state => state.user.currentUser;
 
 // Action creators are generated for each case reducer function
-export const { setUser, logoutUser, setLoggedIn, setloginType } = userSlice.actions;
+export const { setUser, logoutUser, setLoggedIn, setloginType, setToken } = userSlice.actions;
 
 export default userSlice.reducer;
