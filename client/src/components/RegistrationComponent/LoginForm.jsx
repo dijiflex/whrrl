@@ -8,6 +8,7 @@ import { makeStyles } from '@mui/styles';
 import { useSnackbar } from 'notistack';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useLoginUserMutation } from '../../api/whrrlUserAPI';
 import { setUser, setToken } from '../../redux/userSlice';
 
@@ -87,16 +88,31 @@ const LoginForm = () => {
               type="password"
               error={touched.password && !!errors.password}
             />
-            <Button
-              type="submit"
-              size="large"
-              variant="contained"
-              disabled={isSubmitting || isLoading}
-              color="primary"
-              sx={{ width: '100%', p: 2 }}
-            >
-              LOGIN
-            </Button>
+            <Box sx={{ m: 1, position: 'relative' }}>
+              <Button
+                type="submit"
+                size="large"
+                variant="contained"
+                disabled={isSubmitting || isLoading}
+                color="primary"
+                sx={{ width: '100%', p: 2 }}
+              >
+                LOGIN
+              </Button>
+              {isSubmitting && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-12px',
+                  marginLeft: '-12px',
+                }}
+              />
+              )}
+            </Box>
+
           </Form>
         )}
       </Formik>

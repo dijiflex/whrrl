@@ -6,6 +6,7 @@ import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
 import { useSnackbar } from 'notistack';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRegisterUserMutation } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
@@ -87,16 +88,30 @@ const RegistrationForm = () => {
               type="password"
               error={touched.passwordConfirm && !!errors.passwordConfirm}
             />
-            <Button
-              type="submit"
-              size="large"
-              variant="contained"
-              disabled={isSubmitting || isLoading}
-              color="primary"
-              sx={{ width: '100%', p: 2 }}
-            >
-              Register
-            </Button>
+            <Box sx={{ m: 1, position: 'relative' }}>
+              <Button
+                type="submit"
+                size="large"
+                variant="contained"
+                disabled={isSubmitting || isLoading}
+                color="primary"
+                sx={{ width: '100%', p: 2 }}
+              >
+                REGISTER
+              </Button>
+              {isSubmitting && (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-12px',
+                  marginLeft: '-12px',
+                }}
+              />
+              )}
+            </Box>
           </Form>
         )}
       </Formik>
