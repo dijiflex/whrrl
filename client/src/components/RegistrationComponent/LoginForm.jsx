@@ -7,7 +7,9 @@ import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLoginUserMutation } from '../../api/whrrlUserAPI';
+import { setUser, setToken } from '../../redux/userSlice';
 
 const useStyles = makeStyles(theme =>
   ({
@@ -25,6 +27,7 @@ const validationSchema = yup.object({
 });
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [loginUser, { isLoading }] = useLoginUserMutation();
@@ -38,15 +41,19 @@ const LoginForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(values);
           try {
             const res = await loginUser(values).unwrap();
-            enqueueSnackbar('Login successful', { variant: 'success' });
             console.log(res);
+            // Store use Date to the redux store
+            dispatch(setUser(res.data));
+            // Store the returned token
+            dispatch(setToken(res.token));
+            enqueueSnackbar('Login successful', { variant: 'success' });
           } catch (error) {
-            console.log(error);
             if (error.status === 401) {
               enqueueSnackbar('Incorrect email or password', { variant: 'error' });
+            } else {
+              enqueueSnackbar(error?.data?.message || 'Login failed. Kindly Try Later', { variant: 'error' });
             }
           }
           setSubmitting(false);
