@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema(
         message: 'Password do not match',
       },
     },
+    nationality: String,
     passwordCreatedAt: {
       type: Date,
       default: Date.now(),
