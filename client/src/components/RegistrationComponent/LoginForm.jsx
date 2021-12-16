@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as yup from 'yup';
 import Box from '@mui/material/Box';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
-import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { useLoginUserMutation } from '../../api/whrrlUserAPI';
 import { setUser, setToken } from '../../redux/userSlice';
 
@@ -28,9 +28,18 @@ const validationSchema = yup.object({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const { currentUser } = useSelector(state => state.userState);
+
+  useEffect(() => {
+    if (currentUser) {
+      history.push('/user');
+    }
+  }, [currentUser]);
 
   return (
     <Box>
@@ -43,11 +52,11 @@ const LoginForm = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const res = await loginUser(values).unwrap();
-            console.log(res);
-            // Store use Date to the redux store
-            dispatch(setUser(res.data));
             // Store the returned token
             dispatch(setToken(res.token));
+            // Store use Date to the redux store
+            dispatch(setUser(res.data));
+
             enqueueSnackbar('Login successful', { variant: 'success' });
           } catch (error) {
             if (error.status === 401) {
@@ -81,7 +90,7 @@ const LoginForm = () => {
               type="submit"
               size="large"
               variant="contained"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isLoading}
               color="primary"
               sx={{ width: '100%', p: 2 }}
             >
