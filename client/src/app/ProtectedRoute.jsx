@@ -13,7 +13,7 @@ const ProtectedRoute = ({ component: Component, userRole, ...rest }) => {
       {...rest}
       render={props => {
         if (!currentUser) {
-          enqueueSnackbar('Please Login', { variant: 'error' });
+          enqueueSnackbar('Please Login', { variant: 'warning' });
           return (
             <Redirect
               to={{
