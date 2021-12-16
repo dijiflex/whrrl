@@ -1,8 +1,9 @@
+/* eslint-disable import/no-named-as-default */
 import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import userReducer from './userSlice';
-// import navigationSlice from './navigationSlice';
+import navigationSlice from './navigationSlice';
 import whrllAPI from '../api/whrrlAPI';
 
 const persistConfig = {
@@ -13,7 +14,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   userState: userReducer,
-  //   navigationState: navigationSlice,
+  navigationState: navigationSlice,
   [whrllAPI.reducerPath]: whrllAPI.reducer
 });
 
