@@ -1,17 +1,12 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -22,21 +17,39 @@ import ForumIcon from '@mui/icons-material/Forum';
 import LanguageIcon from '@mui/icons-material/Language';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { setUser, setToken } from '../../redux/userSlice';
+import { toggleMobileDrawer } from '../../redux/navigationSlice';
 
 const drawerWidth = 240;
 
-const ResponsiveDrawer = props => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+const ResponsiveDrawer = () => {
+  const { mobileDrawerOpen } = useSelector(state => state.navigationState);
+  const dispatch = useDispatch();
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    dispatch(toggleMobileDrawer());
+  };
+
+  const handleLogout = () => {
+    dispatch(setUser(null));
+    dispatch(setToken(null));
+    enqueueSnackbar('Logged out successfully', { variant: 'success' });
+    history.push('/user');
   };
 
   const drawer = (
     <>
-      <Toolbar sx={{ p: '0!important', m: 0 }} />
+      <Toolbar sx={{ }}>
+        <IconButton onClick={handleDrawerToggle} sx={{ display: { xs: 'block', md: 'none' } }} color="secondary">
+          <MenuIcon />
+        </IconButton>
+      </Toolbar>
       <Divider />
       <List sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '80vh' }}>
         <Box>
@@ -71,11 +84,11 @@ const ResponsiveDrawer = props => {
             </ListItemIcon>
             <ListItemText primary="Raise a Ticket" sx={{ color: 'secondary.main' }} />
           </ListItem>
-          <ListItem button sx={{ pl: 0 }}>
+          <ListItem button sx={{ pl: 0 }} onClick={handleLogout}>
             <ListItemIcon>
               <SettingsIcon color="secondary" />
             </ListItemIcon>
-            <ListItemText primary="FAQ" sx={{ color: 'secondary.main' }} />
+            <ListItemText primary="LogOut" sx={{ color: 'secondary.main' }} />
           </ListItem>
         </Box>
 
@@ -89,13 +102,13 @@ const ResponsiveDrawer = props => {
     return (
       <Drawer
         variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
+        open={mobileDrawerOpen}
+        onClose={() => dispatch(toggleMobileDrawer())}
         ModalProps={{
           keepMounted: true // Better open performance on mobile.
         }}
         sx={{
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'rgba(0, 82, 204,0.5)', }
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'rgba(0, 82, 204,0.9)', }
         }}
       >
         {drawer}
