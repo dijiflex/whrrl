@@ -39,6 +39,7 @@ const LoginForm = () => {
     if (currentUser) {
       history.push('/user');
     }
+    return () => {};
   }, [currentUser]);
 
   return (
