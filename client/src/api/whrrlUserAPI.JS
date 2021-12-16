@@ -10,9 +10,16 @@ export const whrrlUserAPI = whrllAPI.injectEndpoints({
     }),
     loginUser: builder.mutation({
       query: body => ({ url: '/users/login', method: 'POST', body })
+    }),
+    updateMe: builder.mutation({
+      query: body => ({ url: '/users/updateMe', method: 'PATCH', body })
+    }),
+    getMe: builder.query({
+      query: () => ({ url: '/users/me', method: 'GET' })
     })
   })
 });
 
 export const { useGetUserByIdMutation,
-  useRegisterUserMutation, useLoginUserMutation } = whrrlUserAPI;
+  useRegisterUserMutation, useLoginUserMutation,
+  useUpdateMeMutation, useGetMeQuery } = whrrlUserAPI;
