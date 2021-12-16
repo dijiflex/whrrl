@@ -2,11 +2,12 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const whrllAPI = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_API_URL}`,
+    baseUrl: 'http://localhost:3080/api/v1',
     prepareHeaders: async headers => {
       // GEt token
+      console.log(process.env.REACT_APP_API_URL);
 
-      const token = 'this is the token';
+      const token = 'thisisthetoken';
       console.log(token);
 
       if (token) {
