@@ -48,7 +48,14 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  createSendToken(newUser, 201, req, res);
+  // Remove password from output
+  newUser.password = undefined;
+  newUser.passwordCreatedAt = undefined;
+
+  res.status(201).json({
+    status: 'success',
+    data: newUser,
+  });
 });
 
 exports.login = catchAsync(async (req, res, next) => {
