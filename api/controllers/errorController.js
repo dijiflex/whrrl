@@ -14,6 +14,9 @@ const handleDuplicateFieldsDB = err => {
   return new AppError(message, 409);
 };
 
+const handleJWTExpiredError = () =>
+  new AppError('Your Session has expired! Please log in again.', 401);
+
 const handleValidationErrorDB = err => {
   const errors = Object.values(err.errors).map(el => el.message);
 
@@ -82,8 +85,7 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
-    // if (error.name === 'JsonWebTokenError') error = handleJWTError();
-    // if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
     sendErrorProd(error, req, res);
   }
