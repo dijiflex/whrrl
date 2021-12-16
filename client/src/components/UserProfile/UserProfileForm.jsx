@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import { makeStyles } from '@mui/styles';
 import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
+import Skeleton from '@mui/material/Skeleton';
 import { useUpdateMeMutation, useGetMeQuery } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
@@ -38,8 +39,8 @@ const UserProfileForm = () => {
   const { data: userData, isLoading: isLoadingUserData,
     error: userDataError, refetch } = useGetMeQuery();
 
-  if (isLoadingUserData) { return <div>Loading...</div>; }
-  if (userDataError) return <div>Error</div>;
+  if (isLoadingUserData) return <Skeleton variant="rectangular" height={300} />;
+  if (userDataError) return <div>Error Occurred While rendering this components</div>;
   return (
     <div>
       <Formik
