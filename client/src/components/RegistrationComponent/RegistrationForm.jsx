@@ -5,7 +5,7 @@ import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
-import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
 import { useRegisterUserMutation } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
@@ -27,6 +27,7 @@ const validationSchema = yup.object({
 
 const RegistrationForm = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   return (
@@ -41,12 +42,17 @@ const RegistrationForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const res = await registerUser(values);
+            const res = await registerUser(values).unwrap();
+            enqueueSnackbar('Registration successful', { variant: 'success' });
             console.log(res);
           } catch (error) {
+            if (error.status === 409) {
+              enqueueSnackbar('Email already exists', { variant: 'error' });
+            } else {
+              enqueueSnackbar(error?.data?.message || 'Registration failed', { variant: 'error' });
+            }
             console.log(error);
           }
-          console.log(values);
           setSubmitting(false);
         }}
       >

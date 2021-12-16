@@ -6,6 +6,7 @@ import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
 import { useLoginUserMutation } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
@@ -24,6 +25,7 @@ const validationSchema = yup.object({
 });
 
 const LoginForm = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [loginUser, { isLoading }] = useLoginUserMutation();
 
@@ -38,10 +40,14 @@ const LoginForm = () => {
         onSubmit={async (values, { setSubmitting }) => {
           console.log(values);
           try {
-            const res = await loginUser(values);
+            const res = await loginUser(values).unwrap();
+            enqueueSnackbar('Login successful', { variant: 'success' });
             console.log(res);
           } catch (error) {
             console.log(error);
+            if (error.status === 401) {
+              enqueueSnackbar('Incorrect email or password', { variant: 'error' });
+            }
           }
           setSubmitting(false);
         }}
