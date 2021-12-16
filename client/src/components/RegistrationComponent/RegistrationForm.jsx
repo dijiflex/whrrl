@@ -6,16 +6,14 @@ import { TextField } from 'formik-mui';
 import Button from '@mui/material/Button';
 import { makeStyles } from '@mui/styles';
 import Typography from '@mui/material/Typography';
+import { useRegisterUserMutation } from '../../api/whrrlUserAPI';
 
 const useStyles = makeStyles(theme =>
   ({
     form: {
       '& .MuiTextField-root': {
         marginBottom: theme.spacing(2),
-        width: '80%',
-        [theme.breakpoints.only('xs')]: {
-          width: '100%'
-        }
+        width: '100%',
       }
     }
   }));
@@ -29,6 +27,7 @@ const validationSchema = yup.object({
 
 const RegistrationForm = () => {
   const classes = useStyles();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   return (
     <Box>
@@ -41,6 +40,12 @@ const RegistrationForm = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
+          try {
+            const res = await registerUser(values);
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
           console.log(values);
           setSubmitting(false);
         }}
@@ -58,6 +63,7 @@ const RegistrationForm = () => {
               component={TextField}
               name="email"
               label="Email"
+              type="email"
               helperText={errors.email}
               error={touched.email && !!errors.email}
             />
@@ -83,7 +89,7 @@ const RegistrationForm = () => {
               variant="contained"
               disabled={isSubmitting}
               color="primary"
-              sx={{ width: { xs: '100%', sm: '80%' }, p: 2 }}
+              sx={{ width: '100%', p: 2 }}
             >
               Register
             </Button>
