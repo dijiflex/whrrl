@@ -2,6 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import persistedRootReducer from './rootReducer';
+import whrllAPI from '../api/whrrlAPI';
 
 const store = configureStore({
   reducer: persistedRootReducer,
@@ -11,7 +12,7 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
     })
-  //   .concat(ndovuAPI.middleware)
+      .concat(whrllAPI.middleware)
 });
 
 export const persistor = persistStore(store);
