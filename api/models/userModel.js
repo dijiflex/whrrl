@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please Provide a valid email'],
     },
-    phoneNumber: Number,
+    phoneNumber: String,
     role: {
       type: String,
       enum: ['user', 'admin'],
@@ -56,6 +56,8 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+//INDEX
+userSchema.index({ email: 1 }, { unique: true });
 
 userSchema.pre('save', async function (next) {
   // Only run this function if password was actually modified
