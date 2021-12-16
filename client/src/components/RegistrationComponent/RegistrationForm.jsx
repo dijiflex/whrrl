@@ -42,16 +42,14 @@ const RegistrationForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const res = await registerUser(values).unwrap();
+            await registerUser(values).unwrap();
             enqueueSnackbar('Registration successful', { variant: 'success' });
-            console.log(res);
           } catch (error) {
             if (error.status === 409) {
               enqueueSnackbar('Email already exists', { variant: 'error' });
             } else {
               enqueueSnackbar(error?.data?.message || 'Registration failed', { variant: 'error' });
             }
-            console.log(error);
           }
           setSubmitting(false);
         }}
@@ -93,7 +91,7 @@ const RegistrationForm = () => {
               type="submit"
               size="large"
               variant="contained"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isLoading}
               color="primary"
               sx={{ width: '100%', p: 2 }}
             >
